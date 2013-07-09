@@ -1,0 +1,9 @@
+h1 {
+	text-align:center;	
+}
+#c {
+	border:1px solid #333;
+	box-shadow:0 0 15px #666;
+	display:block;
+	margin:0 auto;
+}
