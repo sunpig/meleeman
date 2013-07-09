@@ -2,7 +2,8 @@ requirejs.config({
     baseUrl: 'scripts',
     urlArgs: "bust=" + (new Date()).getTime(), /* cache-buster for dev */
     paths: {
-        jquery: 'lib/jquery-2.0.3.min'
+        jquery: 'lib/jquery-2.0.3.min',
+        EventEmitter: 'lib/EventEmitter-4.1.1.min'
     }
 });
 
@@ -13,21 +14,26 @@ function(
 	Scene
 ) {
 
-	var scene = new Scene('c', 300, 500);
+	var scene = new Scene('c');
+	scene.run();
 
-	function run() {
-		scene.run();
-	}
+	var $pause = $('#pause');
+	var $reset = $('#reset');
 
 	function pause() {
-		scene.pause();
+		if (scene.isRunning()) {
+			scene.pause();
+			$pause.text('Resume');
+		} else {
+			scene.animate();
+			$pause.text('Pause');
+		}
 	}
 
 	function reset() {
 		scene.reset();
 	}
 
-	$('#run').on('click', run);
-	$('#pause').on('click', pause);
-	$('#reset').on('click', reset);
+	$pause.on('click', pause);
+	$reset.on('click', reset);
 });

@@ -6,7 +6,8 @@ define(
 ],
 function($, Particle){
 
-	function RoundParticle (x, y, vx, vy, forces, constraints) {
+	function RoundParticle (options) {
+		this.radius = options.radius || 5;
 		Particle.apply(this, arguments);
 	}
 	RoundParticle.prototype = Object.create(Particle.prototype);
@@ -15,11 +16,15 @@ function($, Particle){
 	$.extend(RoundParticle.prototype, {
 		draw: function(canvas) {
 			var context = canvas.context;
-			context.fillStyle = "rgba(255,0,0,0.5)";
+			context.fillStyle = this.fillStyle;
 			context.beginPath();
-			context.arc(this.x, this.y, 5, 2 * Math.PI, false);
+			context.arc(this.x, this.y, this.radius, 2 * Math.PI, false);
 			context.closePath();
 			context.fill();
+		},
+
+		getBounds: function(){
+			return {t:this.radius,r:this.radius,b:this.radius,l:this.radius};
 		}
 	});
 

@@ -14,7 +14,7 @@ function($, Force){
 
 	$.extend(GravityForce.prototype, {
 		updateParticle: function(particle) {
-			particle.vy += 0.2;
+			particle.dvy = 0.2;
 		}
 	});
 

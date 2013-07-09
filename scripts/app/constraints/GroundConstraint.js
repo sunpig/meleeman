@@ -15,11 +15,22 @@ function($, Constraint){
 
 	$.extend(GroundConstraint.prototype, {
 		updateParticle: function(particle) {
-			if (particle.y > this.groundY && particle.vy > 0) {
+			var lowerExtent = particle.getBounds().b;
+			if ((particle.nexty + lowerExtent) >= this.groundY && particle.vy > 0) {
+				particle.nexty = (this.groundY - lowerExtent);
+
 				// bounce, losing energy
 				particle.vy = -0.6 * particle.vy;
-				// lose energy on the x-axis as well
-				particle.vx = 0.6 * particle.vx;
+				if (Math.abs(particle.vy) < 0.2) {
+					particle.vy = 0;
+				}
+
+				// lose energy on x-axis as well
+				particle.vx = 0.95 * particle.vx;
+				if (Math.abs(particle.vx) < 0.1) {
+					particle.vx = 0;
+				}
+
 			}
 		}
 	});

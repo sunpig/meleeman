@@ -2,20 +2,35 @@ define(
 'app/particles/Particle',
 ['jquery'],
 function($){
-	var Particle = function(x, y, vx, vy, forces, constraints){
-		this.x = x;
-		this.y = y;
-		this.vx = vx;
-		this.vy = vy;
-		this.forces = forces || [];
-		this.constraints = constraints || [];
+	var Particle = function(options){
+		this.x = options.x;
+		this.y = options.y;
+		this.nextx = options.x;
+		this.nexty = options.y;
+		this.vx = options.vx || 0;
+		this.vy = options.vy || 0;
+		this.dvx = 0;
+		this.dvy = 0;
+		this.forces = options.forces || [];
+		this.constraints = options.constraints || [];
+		this.setColour(options.colour);
 	};
 
 	$.extend(Particle.prototype, {
+		destroy: function() {},
+
 		update: function() {
 			this.applyForces();
-			this.updatePosition();
-			this.applyConstraints();
+
+			this.vx += this.dvx;
+			this.vy += this.dvy;
+			this.nextx = this.x + this.vx;
+			this.nexty = this.y + this.vy;
+
+			this.detectCollisions();
+
+			this.x = this.nextx;
+			this.y = this.nexty;
 		},
 
 		applyForces: function() {
@@ -24,21 +39,25 @@ function($){
 			}, this);
 		},
 
-		updatePosition: function() {
-			this.x += this.vx;
-			this.y += this.vy;
-		},
-
-		applyConstraints: function() {
+		detectCollisions: function() {
 			this.constraints.forEach(function(constraint){
 				constraint.updateParticle(this);
 			}, this);
 		},
 
-		draw: function(canvas) {
-			var context = canvas.context;
-			context.fillStyle = "rgba(255,0,0,0.5)";
-			context.fillRect(this.x, this.y, 5, 5);
+		setColour: function(colourOptions) {
+			if (colourOptions.fill) {
+				var fill = colourOptions.fill;
+				this.fillStyle = "rgba(" + fill.r + "," + fill.g + "," + fill.b + "," + fill.a + ")";
+			} else {
+				this.fillStyle = "rgba(150,150,150,0.5)";
+			}
+		},
+
+		draw: function(canvas) {},
+
+		getBounds: function(){
+			return {t:0,r:0,b:0,l:0};
 		}
 	});
 
