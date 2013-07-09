@@ -4,15 +4,17 @@ define(
 	'jquery',
 	'app/Canvas',
 	'app/particles/RoundParticle',
+	'app/particles/RectangleParticle',
 	'app/forces/GravityForce',
 	'app/constraints/GroundConstraint',
 	'app/ee',
-	'app/util',
+	'app/util'
 ],
 function(
 	$,
 	Canvas,
 	RoundParticle,
+	RectangleParticle,
 	GravityForce,
 	GroundConstraint,
 	ee,

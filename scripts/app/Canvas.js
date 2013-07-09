@@ -21,7 +21,17 @@ function($, ee){
 	$.extend(Canvas.prototype, {
 		onClick: function(e) {
 			e.preventDefault();
-			ee.trigger('canvas/tap', [{x: e.offsetX, y: e.offsetY}]);
+			var x,y;
+
+			if (e.offsetX) {
+				x = e.offsetX;
+				y = e.offsetY;
+			} else {
+				x = e.pageX - $(e.target).offset().left;
+				y = e.pageY - $(e.target).offset().top;
+			}
+
+			ee.trigger('canvas/tap', [{x:x, y:y}]);
 		},
 
 		clear: function() {
