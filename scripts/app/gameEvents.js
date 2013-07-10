@@ -1,5 +1,5 @@
 define(
-'app/ee',
+'app/gameEvents',
 [
 	'EventEmitter'
 ],

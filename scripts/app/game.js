@@ -1,29 +1,30 @@
 define(
 'app/game',
 [
-	'app/Scene'
+	'app/gameEvents',
+	'app/Scene',
+	'app/Controls'
 ],
 function(
-	Scene
+	gameEvents,
+	Scene,
+	Controls
 ) {
 	var _scene = null;
 	var _raf = null;
 
-	var _$pause = null;
-	var _$reset = null;
-
 	function pause() {
 		if (_raf) {
 			suspendAnimation();
-			$pause.text('Resume');
+			gameEvents.trigger('game/paused');
 		} else {
 			animate();
-			$pause.text('Pause');
+			gameEvents.trigger('game/resumed');
 		}
 	}
 
 	function reset() {
-		scene.reset();
+		_scene.reset();
 	}
 
 	function suspendAnimation() {
@@ -39,13 +40,24 @@ function(
 	}
 
 	var game = {
-		init: function() {
+		init: function(id) {
+			var gameContainer = document.getElementById('game');
+			if (gameContainer) {
+				var sceneCanvas = document.createElement('canvas');
+				sceneCanvas.className = 'scene';
+				gameContainer.appendChild(sceneCanvas);
+				_scene = new Scene(sceneCanvas);
 
-			_scene = new Scene('c');
-			animate();
+				var controlsContainer = document.createElement('div');
+				controlsContainer.className = 'controls';
+				gameContainer.appendChild(controlsContainer);
+				_controls = new Controls(controlsContainer);
 
-			_$pause = $('#pause').on('click', pause);
-			_$reset = $('#reset').on('click', reset);
+				animate();
+
+				gameEvents.on('controls/pause', pause);
+				gameEvents.on('controls/reset', reset);
+			}
 		}
 	};
 

@@ -1,9 +1,14 @@
 h1 {
 	text-align:center;	
 }
-#c {
-	border:1px solid #333;
-	box-shadow:0 0 15px #666;
+#game {
+	text-align:center;
 	display:block;
 	margin:0 auto;
+}
+.scene {
+	border:1px solid #ccf;
+}
+.controls {
+	border:1px solid #fcc;
 }

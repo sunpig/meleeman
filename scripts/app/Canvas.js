@@ -1,12 +1,13 @@
 define(
 'app/Canvas',
 [
-	'jquery',
-	'app/ee'
+	'app/game',
+	'app/gameEvents',
+	'jquery'
 ],
-function($, ee){
+function(game, gameEvents, $){
 	var Canvas = function(options){
-		this.el = document.getElementById(options.id);
+		this.el = options.el;
 		this.context = this.el.getContext('2d');
 
 		this.el.height = options.height;
@@ -31,7 +32,7 @@ function($, ee){
 				y = e.pageY - $(e.target).offset().top;
 			}
 
-			ee.trigger('canvas/tap', [{x:x, y:y}]);
+			gameEvents.trigger('canvas/tap', [{x:x, y:y}]);
 		},
 
 		clear: function() {

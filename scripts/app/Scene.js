@@ -1,43 +1,43 @@
 define(
 'app/Scene',
 [
+	'app/gameEvents',
 	'jquery',
 	'app/Canvas',
 	'app/particles/RoundParticle',
 	'app/particles/RectangleParticle',
 	'app/forces/GravityForce',
 	'app/constraints/GroundConstraint',
-	'app/ee',
 	'app/util'
 ],
 function(
+	gameEvents,
 	$,
 	Canvas,
 	RoundParticle,
 	RectangleParticle,
 	GravityForce,
 	GroundConstraint,
-	ee,
 	util
 ) {
 
 	var HEIGHT = 360;
 	var WIDTH = 640;
 
-	function Scene(id) {
-		this.initCanvas(id);
+	function Scene(el) {
+		this.initCanvas(el);
 		this.initDebug();
 		this.initParticles();
 	}
 
 	$.extend(Scene.prototype, {
-		initCanvas: function(id) {
+		initCanvas: function(el) {
 			this.canvas = new Canvas({
-				id: id,
+				el: el,
 				height: HEIGHT,
 				width: WIDTH
 			});
-			ee.on('canvas/tap', $.proxy(this.addParticle, this));
+			gameEvents.on('canvas/tap', $.proxy(this.addParticle, this));
 		},
 
 		initDebug: function() {
