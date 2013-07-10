@@ -51,12 +51,3 @@ function(
 
 	return game;
 });
-
-require([
-	'app/Scene'
-],
-function(
-	Scene
-) {
-
-});
