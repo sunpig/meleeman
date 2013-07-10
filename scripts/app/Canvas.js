@@ -2,10 +2,10 @@ define(
 'app/Canvas',
 [
 	'app/game',
-	'app/gameEvents',
+	'app/gameState',
 	'jquery'
 ],
-function(game, gameEvents, $){
+function(game, gameState, $){
 	var Canvas = function(options){
 		this.el = options.el;
 		this.context = this.el.getContext('2d');
@@ -32,7 +32,7 @@ function(game, gameEvents, $){
 				y = e.pageY - $(e.target).offset().top;
 			}
 
-			gameEvents.trigger('canvas/tap', [{x:x, y:y}]);
+			gameState.trigger('canvas/tap', [{x:x, y:y}]);
 		},
 
 		clear: function() {

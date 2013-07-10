@@ -1,7 +1,7 @@
 define(
 'app/Scene',
 [
-	'app/gameEvents',
+	'app/gameState',
 	'jquery',
 	'app/Canvas',
 	'app/particles/RoundParticle',
@@ -11,7 +11,7 @@ define(
 	'app/util'
 ],
 function(
-	gameEvents,
+	gameState,
 	$,
 	Canvas,
 	RoundParticle,
@@ -26,7 +26,6 @@ function(
 
 	function Scene(el) {
 		this.initCanvas(el);
-		this.initDebug();
 		this.initParticles();
 	}
 
@@ -37,11 +36,7 @@ function(
 				height: HEIGHT,
 				width: WIDTH
 			});
-			gameEvents.on('canvas/tap', $.proxy(this.addParticle, this));
-		},
-
-		initDebug: function() {
-			this.$debugOutput = $('<p></p>').insertAfter(this.canvas.el);
+			gameState.on('canvas/tap', $.proxy(this.addParticle, this));
 		},
 
 		initParticles: function() {
@@ -64,6 +59,7 @@ function(
 				this.particles[i].destroy();
 				this.particles.pop();
 			}
+			gameState.particles = this.particles.length;
 		},
 
 		addParticle: function(options) {
@@ -85,12 +81,7 @@ function(
 				radius: util.getRandomInt(5,30)
 			});
 			this.particles.push(p);
-		},
-
-		updateDebugInfo: function() {
-			if (this.$debugOutput) {
-				this.$debugOutput.html('particles: ' + this.particles.length);
-			}
+			gameState.particles = this.particles.length;
 		},
 
 		animate: function() {
@@ -99,7 +90,6 @@ function(
 				particle.update();
 				particle.draw(this.canvas);
 			}, this);
-			this.updateDebugInfo();
 		}
 
 	});

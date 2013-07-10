@@ -1,25 +1,28 @@
 define(
 'app/game',
 [
-	'app/gameEvents',
+	'app/gameState',
 	'app/Scene',
-	'app/Controls'
+	'app/Controls',
+	'app/DebugConsole'
 ],
 function(
-	gameEvents,
+	gameState,
 	Scene,
-	Controls
+	Controls,
+	DebugConsole
 ) {
 	var _scene = null;
+	var _debugConsole = null;
 	var _raf = null;
 
 	function pause() {
 		if (_raf) {
 			suspendAnimation();
-			gameEvents.trigger('game/paused');
+			gameState.trigger('game/paused');
 		} else {
 			animate();
-			gameEvents.trigger('game/resumed');
+			gameState.trigger('game/resumed');
 		}
 	}
 
@@ -32,11 +35,14 @@ function(
 			window.cancelAnimationFrame(_raf);
 			_raf = null;
 		}
+		gameState.running = false;
 	}
 
 	function animate() {
 		_raf = window.requestAnimationFrame(animate);
 		_scene.animate();
+		_debugConsole.update();
+		gameState.running = true;
 	}
 
 	var game = {
@@ -53,10 +59,15 @@ function(
 				gameContainer.appendChild(controlsContainer);
 				_controls = new Controls(controlsContainer);
 
+				var debugConsoleContainer = document.createElement('div');
+				debugConsoleContainer.className = 'debugconsole';
+				gameContainer.appendChild(debugConsoleContainer);
+				_debugConsole = new DebugConsole(debugConsoleContainer);
+
 				animate();
 
-				gameEvents.on('controls/pause', pause);
-				gameEvents.on('controls/reset', reset);
+				gameState.on('controls/pause', pause);
+				gameState.on('controls/reset', reset);
 			}
 		}
 	};
