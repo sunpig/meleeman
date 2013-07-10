@@ -103,7 +103,7 @@ function(
 
 		animate: function() {
 			this.suspendAnimation();
-			this.raf = window.requestAnimationFrame($.proxy(this.run, this));
+			this.raf = window.requestAnimationFrame(this.run.bind(this));
 			this.canvas.clear();
 			this.particles.forEach(function(particle){
 				particle.update();
