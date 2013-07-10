@@ -25,7 +25,6 @@ function(
 	var WIDTH = 640;
 
 	function Scene(id) {
-		this.raf = null;
 		this.initCanvas(id);
 		this.initDebug();
 		this.initParticles();
@@ -94,34 +93,13 @@ function(
 			}
 		},
 
-		suspendAnimation: function() {
-			if (this.raf) {
-				window.cancelAnimationFrame(this.raf);
-				this.raf = null;
-			}
-		},
-
 		animate: function() {
-			this.suspendAnimation();
-			this.raf = window.requestAnimationFrame(this.run.bind(this));
 			this.canvas.clear();
 			this.particles.forEach(function(particle){
 				particle.update();
 				particle.draw(this.canvas);
 			}, this);
 			this.updateDebugInfo();
-		},
-
-		run: function() {
-			this.animate();
-		},
-
-		pause: function() {
-			this.suspendAnimation();
-		},
-
-		isRunning: function() {
-			return !!this.raf;
 		}
 
 	});

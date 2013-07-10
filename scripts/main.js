@@ -8,32 +8,10 @@ requirejs.config({
 });
 
 require([
-	'app/Scene'
+	'app/game'
 ],
 function(
-	Scene
+	game
 ) {
-
-	var scene = new Scene('c');
-	scene.run();
-
-	var $pause = $('#pause');
-	var $reset = $('#reset');
-
-	function pause() {
-		if (scene.isRunning()) {
-			scene.pause();
-			$pause.text('Resume');
-		} else {
-			scene.animate();
-			$pause.text('Pause');
-		}
-	}
-
-	function reset() {
-		scene.reset();
-	}
-
-	$pause.on('click', pause);
-	$reset.on('click', reset);
+	game.init();
 });
