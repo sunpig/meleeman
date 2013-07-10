@@ -35,10 +35,10 @@ function(gameState, $){
 			gameState.trigger('controls/reset');
 		},
 		onLeftClick: function() {
-			gameState.trigger('controls/reset');
+			gameState.trigger('controls/left');
 		},
 		onRightClick: function() {
-			gameState.trigger('controls/reset');
+			gameState.trigger('controls/right');
 		}
 	});
 

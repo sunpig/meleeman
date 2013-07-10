@@ -18,7 +18,7 @@ function($, Particle){
 			var context = canvas.context;
 			context.fillStyle = this.fillStyle;
 			context.beginPath();
-			context.arc(this.x, this.y, this.radius, 2 * Math.PI, false);
+			context.arc(canvas.getX(this.x), canvas.getY(this.y), this.radius, 2 * Math.PI, false);
 			context.closePath();
 			context.fill();
 		},

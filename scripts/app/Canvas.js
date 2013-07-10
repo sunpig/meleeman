@@ -16,10 +16,19 @@ function(game, gameState, $){
 		this.viewportHeight = options.height;
 		this.viewportWidth = options.width;
 
-		$(this.el).on('click', $.proxy(this.onClick, this));
+		this.sceneOffsetX = 0;
+		this.sceneOffsetY = 0;
+
+		this.listen();
 	};
 
 	$.extend(Canvas.prototype, {
+		listen: function() {
+			$(this.el).on('click', $.proxy(this.onClick, this));
+			gameState.on('controls/left', $.proxy(this.left, this));
+			gameState.on('controls/right', $.proxy(this.right, this));
+		},
+
 		onClick: function(e) {
 			e.preventDefault();
 			var x,y;
@@ -38,6 +47,22 @@ function(game, gameState, $){
 		clear: function() {
 			this.context.fillStyle = "rgba(255,255,100,0.2)";
 			this.context.clearRect(0, 0, this.viewportWidth, this.viewportHeight);
+		},
+
+		left: function() {
+			this.sceneOffsetX -= 20;
+		},
+
+		right: function() {
+			this.sceneOffsetX += 20;
+		},
+
+		getX: function(sceneX) {
+			return sceneX + this.sceneOffsetX;
+		},
+
+		getY: function(sceneY) {
+			return sceneY + this.sceneOffsetY;
 		}
 	});
 

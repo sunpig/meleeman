@@ -18,7 +18,7 @@ function($, Particle){
 		draw: function(canvas) {
 			var context = canvas.context;
 			context.fillStyle = this.fillStyle;
-			context.fillRect(this.x, this.y, this.width, this.height);
+			context.fillRect(canvas.getX(this.x), canvas.getY(this.y), this.width, this.height);
 		},
 
 		getBounds: function(){
