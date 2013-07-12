@@ -49,10 +49,10 @@ function(
 		init: function(id) {
 			var gameContainer = document.getElementById('game');
 			if (gameContainer) {
-				var sceneCanvas = document.createElement('canvas');
-				sceneCanvas.className = 'scene';
-				gameContainer.appendChild(sceneCanvas);
-				_scene = new Scene(sceneCanvas);
+				var htmlCanvas = document.createElement('canvas');
+				htmlCanvas.className = 'viewport';
+				gameContainer.appendChild(htmlCanvas);
+				_scene = new Scene({htmlCanvas: htmlCanvas});
 
 				var controlsContainer = document.createElement('div');
 				controlsContainer.className = 'controls';

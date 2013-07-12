@@ -15,11 +15,14 @@ function($, SceneElement){
 	RoundParticle.prototype.constructor = RoundParticle;
 
 	$.extend(RoundParticle.prototype, {
-		draw: function(canvas) {
-			var context = canvas.context;
+		draw: function(viewport) {
+			var context = viewport.graphicsContext;
+			var viewportX = viewport.getViewportX(this.sceneX);
+			var viewportY = viewport.getViewportY(this.sceneY);
+
 			context.fillStyle = this.fillStyle;
 			context.beginPath();
-			context.arc(canvas.getX(this.x), canvas.getY(this.y), this.radius, 2 * Math.PI, false);
+			context.arc(viewportX, viewportY, this.radius, 2 * Math.PI, false);
 			context.closePath();
 			context.fill();
 		}

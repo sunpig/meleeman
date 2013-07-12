@@ -3,10 +3,10 @@ define(
 ['jquery'],
 function($){
 	var SceneElement = function(options){
-		this.x = options.x;
-		this.y = options.y;
-		this.nextx = options.x;
-		this.nexty = options.y;
+		this.sceneX = options.sceneX;
+		this.sceneY = options.sceneY;
+		this.nextx = options.sceneX;
+		this.nexty = options.sceneY;
 		this.vx = options.vx || 0;
 		this.vy = options.vy || 0;
 		this.dvx = 0;
@@ -29,8 +29,8 @@ function($){
 
 			this.vx += this.dvx;
 			this.vy += this.dvy;
-			this.nextx = this.x + this.vx;
-			this.nexty = this.y + this.vy;
+			this.nextx = this.sceneX + this.vx;
+			this.nexty = this.sceneY + this.vy;
 		},
 
 		// Detect collisions based on anticipated position and velocity
@@ -39,8 +39,8 @@ function($){
 				collisionPhaseBehaviour.updateSceneElement(this);
 			}, this);
 
-			this.x = this.nextx;
-			this.y = this.nexty;
+			this.sceneX = this.nextx;
+			this.sceneY = this.nexty;
 		},
 
 		// Detect collisions based on anticipated position and velocity
@@ -59,7 +59,7 @@ function($){
 			}
 		},
 
-		draw: function(canvas) {}
+		draw: function(viewport) {}
 
 	});
 

@@ -3,7 +3,7 @@ define(
 [
 	'app/gameState',
 	'jquery',
-	'app/Canvas',
+	'app/Viewport',
 	'app/particles/RoundParticle',
 	'app/particles/RectangleParticle',
 	'app/behaviours/GravityBehaviour',
@@ -13,7 +13,7 @@ define(
 function(
 	gameState,
 	$,
-	Canvas,
+	Viewport,
 	RoundParticle,
 	RectangleParticle,
 	GravityBehaviour,
@@ -24,19 +24,19 @@ function(
 	var HEIGHT = 360;
 	var WIDTH = 640;
 
-	function Scene(el) {
-		this.initCanvas(el);
+	function Scene(options) {
+		this.initViewport(options.htmlCanvas);
 		this.initParticles();
 	}
 
 	$.extend(Scene.prototype, {
-		initCanvas: function(el) {
-			this.canvas = new Canvas({
-				el: el,
+		initViewport: function(htmlCanvas) {
+			this.viewport = new Viewport({
+				htmlCanvas: htmlCanvas,
 				height: HEIGHT,
 				width: WIDTH
 			});
-			gameState.on('canvas/tap', $.proxy(this.addParticle, this));
+			gameState.on('viewport/tap', $.proxy(this.addParticle, this));
 		},
 
 		initParticles: function() {
@@ -64,8 +64,8 @@ function(
 
 		addParticle: function(options) {
 			var p = new RoundParticle({
-				x: options.x,
-				y: options.y,
+				sceneX: options.sceneX,
+				sceneY: options.sceneY,
 				vx: (Math.random() - 0.5) * 5,
 				vy: (Math.random() * 7) - 10,
 				movementPhaseBehaviours: this.movementPhaseBehaviours,
@@ -85,7 +85,7 @@ function(
 		},
 
 		animate: function() {
-			this.canvas.clear();
+			this.viewport.clear();
 			this.particles.forEach(function(particle){
 				particle.doMovementPhase();
 			}, this);
@@ -96,7 +96,7 @@ function(
 				particle.doActionPhase();
 			}, this);
 			this.particles.forEach(function(particle){
-				particle.draw(this.canvas);
+				particle.draw(this.viewport);
 			}, this);
 		}
 
