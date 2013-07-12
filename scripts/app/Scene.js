@@ -6,8 +6,8 @@ define(
 	'app/Canvas',
 	'app/particles/RoundParticle',
 	'app/particles/RectangleParticle',
-	'app/forces/GravityForce',
-	'app/constraints/GroundConstraint',
+	'app/behaviours/GravityBehaviour',
+	'app/behaviours/GroundBehaviour',
 	'app/util'
 ],
 function(
@@ -16,8 +16,8 @@ function(
 	Canvas,
 	RoundParticle,
 	RectangleParticle,
-	GravityForce,
-	GroundConstraint,
+	GravityBehaviour,
+	GroundBehaviour,
 	util
 ) {
 
@@ -41,11 +41,11 @@ function(
 
 		initParticles: function() {
 			this.particles = [];
-			this.particleForces = [
-				new GravityForce()
+			this.movementPhaseBehaviours = [
+				new GravityBehaviour()
 			];
-			this.particleConstraints = [
-				new GroundConstraint(HEIGHT - 20)
+			this.collisionPhaseBehaviours = [
+				new GroundBehaviour(HEIGHT - 20)
 			];
 		},
 
@@ -68,8 +68,8 @@ function(
 				y: options.y,
 				vx: (Math.random() - 0.5) * 5,
 				vy: (Math.random() * 7) - 10,
-				forces: this.particleForces,
-				constraints: this.particleConstraints,
+				movementPhaseBehaviours: this.movementPhaseBehaviours,
+				collisionPhaseBehaviours: this.collisionPhaseBehaviours,
 				colour: {
 					fill: {
 						r: util.getRandomInt(0,255),
@@ -87,7 +87,15 @@ function(
 		animate: function() {
 			this.canvas.clear();
 			this.particles.forEach(function(particle){
-				particle.update();
+				particle.doMovementPhase();
+			}, this);
+			this.particles.forEach(function(particle){
+				particle.doCollisionPhase();
+			}, this);
+			this.particles.forEach(function(particle){
+				particle.doActionPhase();
+			}, this);
+			this.particles.forEach(function(particle){
 				particle.draw(this.canvas);
 			}, this);
 		}

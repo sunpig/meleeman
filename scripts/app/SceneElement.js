@@ -11,37 +11,42 @@ function($){
 		this.vy = options.vy || 0;
 		this.dvx = 0;
 		this.dvy = 0;
-		this.forces = options.forces || [];
-		this.constraints = options.constraints || [];
+		this.movementPhaseBehaviours = options.movementPhaseBehaviours || [];
+		this.collisionPhaseBehaviours = options.collisionPhaseBehaviours || [];
+		this.actionPhaseBehaviours = options.actionPhaseBehaviours || [];
 		this.setColour(options.colour);
+		this.bounds = {t:0,r:0,b:0,l:0};
 	};
 
 	$.extend(SceneElement.prototype, {
 		destroy: function() {},
 
-		update: function() {
-			this.applyForces();
+		// Update anticipated position and velocity
+		doMovementPhase: function() {
+			this.movementPhaseBehaviours.forEach(function(movementPhaseBehaviour){
+				movementPhaseBehaviour.updateSceneElement(this);
+			}, this);
 
 			this.vx += this.dvx;
 			this.vy += this.dvy;
 			this.nextx = this.x + this.vx;
 			this.nexty = this.y + this.vy;
+		},
 
-			this.detectCollisions();
+		// Detect collisions based on anticipated position and velocity
+		doCollisionPhase: function() {
+			this.collisionPhaseBehaviours.forEach(function(collisionPhaseBehaviour){
+				collisionPhaseBehaviour.updateSceneElement(this);
+			}, this);
 
 			this.x = this.nextx;
 			this.y = this.nexty;
 		},
 
-		applyForces: function() {
-			this.forces.forEach(function(force){
-				force.updateSceneElement(this);
-			}, this);
-		},
-
-		detectCollisions: function() {
-			this.constraints.forEach(function(constraint){
-				constraint.updateSceneElement(this);
+		// Detect collisions based on anticipated position and velocity
+		doActionPhase: function() {
+			this.actionPhaseBehaviours.forEach(function(actionPhaseBehaviour){
+				actionPhaseBehaviour.updateSceneElement(this);
 			}, this);
 		},
 
@@ -54,11 +59,8 @@ function($){
 			}
 		},
 
-		draw: function(canvas) {},
+		draw: function(canvas) {}
 
-		getBounds: function(){
-			return {t:0,r:0,b:0,l:0};
-		}
 	});
 
 	return SceneElement;

@@ -7,8 +7,9 @@ define(
 function($, SceneElement){
 
 	function RoundParticle (options) {
-		this.radius = options.radius || 5;
 		SceneElement.apply(this, arguments);
+		this.radius = options.radius || 5;
+		this.bounds = {t:this.radius,r:this.radius,b:this.radius,l:this.radius};
 	}
 	RoundParticle.prototype = Object.create(SceneElement.prototype);
 	RoundParticle.prototype.constructor = RoundParticle;
@@ -21,11 +22,8 @@ function($, SceneElement){
 			context.arc(canvas.getX(this.x), canvas.getY(this.y), this.radius, 2 * Math.PI, false);
 			context.closePath();
 			context.fill();
-		},
-
-		getBounds: function(){
-			return {t:this.radius,r:this.radius,b:this.radius,l:this.radius};
 		}
+
 	});
 
 	return RoundParticle;

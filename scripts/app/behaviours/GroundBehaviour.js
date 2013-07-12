@@ -1,21 +1,21 @@
 define(
-'app/constraints/GroundConstraint',
+'app/behaviours/GroundBehaviour',
 [
 	'jquery',
-	'app/constraints/Constraint'
+	'app/Behaviour'
 ],
-function($, Constraint){
+function($, Behaviour){
 
-	function GroundConstraint (groundY) {
+	function GroundBehaviour (groundY) {
 		this.groundY = groundY;
-		Constraint.apply(this, arguments);
+		Behaviour.apply(this, arguments);
 	}
-	GroundConstraint.prototype = Object.create(Constraint.prototype);
-	GroundConstraint.prototype.constructor = GroundConstraint;
+	GroundBehaviour.prototype = Object.create(Behaviour.prototype);
+	GroundBehaviour.prototype.constructor = GroundBehaviour;
 
-	$.extend(GroundConstraint.prototype, {
+	$.extend(GroundBehaviour.prototype, {
 		updateSceneElement: function(sceneElement) {
-			var lowerExtent = sceneElement.getBounds().b;
+			var lowerExtent = sceneElement.bounds.b;
 			if ((sceneElement.nexty + lowerExtent) >= this.groundY && sceneElement.vy > 0) {
 				sceneElement.nexty = (this.groundY - lowerExtent);
 
@@ -35,5 +35,5 @@ function($, Constraint){
 		}
 	});
 
-	return GroundConstraint;
+	return GroundBehaviour;
 });
