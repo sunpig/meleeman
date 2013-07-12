@@ -6,8 +6,7 @@ function($){
 	};
 
 	$.extend(Constraint.prototype, {
-		updateParticle: function(particle) {
-		}
+		updateSceneElement: function(sceneElement) {}
 	});
 
 	return Constraint;

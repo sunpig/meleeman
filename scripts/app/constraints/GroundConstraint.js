@@ -14,21 +14,21 @@ function($, Constraint){
 	GroundConstraint.prototype.constructor = GroundConstraint;
 
 	$.extend(GroundConstraint.prototype, {
-		updateParticle: function(particle) {
-			var lowerExtent = particle.getBounds().b;
-			if ((particle.nexty + lowerExtent) >= this.groundY && particle.vy > 0) {
-				particle.nexty = (this.groundY - lowerExtent);
+		updateSceneElement: function(sceneElement) {
+			var lowerExtent = sceneElement.getBounds().b;
+			if ((sceneElement.nexty + lowerExtent) >= this.groundY && sceneElement.vy > 0) {
+				sceneElement.nexty = (this.groundY - lowerExtent);
 
 				// bounce, losing energy
-				particle.vy = -0.6 * particle.vy;
-				if (Math.abs(particle.vy) < 0.2) {
-					particle.vy = 0;
+				sceneElement.vy = -0.6 * sceneElement.vy;
+				if (Math.abs(sceneElement.vy) < 0.2) {
+					sceneElement.vy = 0;
 				}
 
 				// lose energy on x-axis as well
-				particle.vx = 0.95 * particle.vx;
-				if (Math.abs(particle.vx) < 0.1) {
-					particle.vx = 0;
+				sceneElement.vx = 0.95 * sceneElement.vx;
+				if (Math.abs(sceneElement.vx) < 0.1) {
+					sceneElement.vx = 0;
 				}
 
 			}

@@ -13,8 +13,8 @@ function($, Force){
 	GravityForce.prototype.constructor = GravityForce;
 
 	$.extend(GravityForce.prototype, {
-		updateParticle: function(particle) {
-			particle.dvy = 0.3;
+		updateSceneElement: function(sceneElement) {
+			sceneElement.dvy = 0.3;
 		}
 	});
 

@@ -2,16 +2,16 @@ define(
 'app/particles/RectangleParticle',
 [
 	'jquery',
-	'app/particles/Particle'
+	'app/SceneElement'
 ],
-function($, Particle){
+function($, SceneElement){
 
 	function RectangleParticle (options) {
 		this.width = options.width || 5;
 		this.height = options.height || 5;
-		Particle.apply(this, arguments);
+		SceneElement.apply(this, arguments);
 	}
-	RectangleParticle.prototype = Object.create(Particle.prototype);
+	RectangleParticle.prototype = Object.create(SceneElement.prototype);
 	RectangleParticle.prototype.constructor = RectangleParticle;
 
 	$.extend(RectangleParticle.prototype, {

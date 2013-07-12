@@ -2,15 +2,15 @@ define(
 'app/particles/RoundParticle',
 [
 	'jquery',
-	'app/particles/Particle'
+	'app/SceneElement'
 ],
-function($, Particle){
+function($, SceneElement){
 
 	function RoundParticle (options) {
 		this.radius = options.radius || 5;
-		Particle.apply(this, arguments);
+		SceneElement.apply(this, arguments);
 	}
-	RoundParticle.prototype = Object.create(Particle.prototype);
+	RoundParticle.prototype = Object.create(SceneElement.prototype);
 	RoundParticle.prototype.constructor = RoundParticle;
 
 	$.extend(RoundParticle.prototype, {

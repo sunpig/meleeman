@@ -6,8 +6,7 @@ function($){
 	};
 
 	$.extend(Force.prototype, {
-		updateParticle: function(particle) {
-		}
+		updateSceneElement: function(sceneElement) {}
 	});
 
 	return Force;

@@ -1,8 +1,8 @@
 define(
-'app/particles/Particle',
+'app/SceneElement',
 ['jquery'],
 function($){
-	var Particle = function(options){
+	var SceneElement = function(options){
 		this.x = options.x;
 		this.y = options.y;
 		this.nextx = options.x;
@@ -16,7 +16,7 @@ function($){
 		this.setColour(options.colour);
 	};
 
-	$.extend(Particle.prototype, {
+	$.extend(SceneElement.prototype, {
 		destroy: function() {},
 
 		update: function() {
@@ -35,13 +35,13 @@ function($){
 
 		applyForces: function() {
 			this.forces.forEach(function(force){
-				force.updateParticle(this);
+				force.updateSceneElement(this);
 			}, this);
 		},
 
 		detectCollisions: function() {
 			this.constraints.forEach(function(constraint){
-				constraint.updateParticle(this);
+				constraint.updateSceneElement(this);
 			}, this);
 		},
 
@@ -61,5 +61,5 @@ function($){
 		}
 	});
 
-	return Particle;
+	return SceneElement;
 });
