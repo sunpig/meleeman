@@ -20,11 +20,14 @@ function($, SceneElement){
 			var viewportX = viewport.getViewportX(this.sceneX);
 			var viewportY = viewport.getViewportY(this.sceneY);
 
-			context.fillStyle = this.fillStyle;
-			context.beginPath();
-			context.arc(viewportX, viewportY, this.radius, 2 * Math.PI, false);
-			context.closePath();
-			context.fill();
+			// Only need to draw when then particle is in view
+			if ( ((viewportX + this.radius) > 0) && ((viewportX - this.radius) < viewport.viewportWidth) ) {
+				context.fillStyle = this.fillStyle;
+				context.beginPath();
+				context.arc(viewportX, viewportY, this.radius, 2 * Math.PI, false);
+				context.closePath();
+				context.fill();
+			}
 		}
 
 	});

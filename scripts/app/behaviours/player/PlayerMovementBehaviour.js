@@ -7,7 +7,7 @@ define(
 ],
 function($, Behaviour, gameState){
 
-	var MAX_VX = 5;
+	var MAX_VX = 7;
 	var X_ACCELERATION = 0.5;
 
 	function PlayerMovementBehaviour () {

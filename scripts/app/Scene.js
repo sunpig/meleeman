@@ -72,10 +72,8 @@ function(
 		},
 
 		resetParticles: function() {
-			var i = this.particles.length;
-			while (i--) {
-				this.particles[i].destroy();
-				this.particles.pop();
+			while (this.particles.length) {
+				this.particles.shift().destroy();
 			}
 			gameState.particles = this.particles.length;
 		},
@@ -109,6 +107,24 @@ function(
 			gameState.particles = this.particles.length;
 		},
 
+		removeParticle: function() {
+			this.particles.shift().destroy();
+			gameState.particles = this.particles.length;
+		},
+
+		doActionPhase: function() {
+			if (Math.random() < 0.01) {
+				this.addParticle({
+					sceneX: this.viewport.getSceneX((this.viewport.viewportWidth / 2) + this.player.bounds.l),
+					sceneY: util.getRandomInt(50, HEIGHT - 100)
+				});
+			}
+
+			if (this.particles.length > 50) {
+				this.removeParticle();
+			}
+		},
+
 		animate: function() {
 			this.viewport.clear();
 
@@ -125,6 +141,7 @@ function(
 			this.player.doCollisionPhase();
 
 			// Action phase
+			this.doActionPhase();
 			this.particles.forEach(function(particle){
 				particle.doActionPhase();
 			}, this);
