@@ -25,8 +25,6 @@ function(game, gameState, $){
 	$.extend(Viewport.prototype, {
 		listen: function() {
 			$(this.htmlCanvas).on('click', $.proxy(this.onClick, this));
-			gameState.on('controls/left', $.proxy(this.left, this));
-			gameState.on('controls/right', $.proxy(this.right, this));
 		},
 
 		onClick: function(e) {
@@ -76,6 +74,21 @@ function(game, gameState, $){
 
 		getViewportY: function(sceneY) {
 			return sceneY + this.sceneOffsetY;
+		},
+
+		keepInView: function(player) {
+			var leftViewportBoundary = 20;
+			var rightViewportBoundary = this.viewportWidth - 20;
+
+			var playerViewportX = this.getViewportX(player.sceneX);
+			var playerLeftExtent = playerViewportX - player.bounds.l;
+			var playerRightExtent = playerViewportX + player.bounds.r;
+
+			if (playerLeftExtent < leftViewportBoundary) {
+				this.sceneOffsetX += (leftViewportBoundary - playerLeftExtent);
+			} else if (playerRightExtent > rightViewportBoundary) {
+				this.sceneOffsetX -= (playerRightExtent - rightViewportBoundary);
+			}
 		}
 	});
 

@@ -6,15 +6,17 @@ define(
 ],
 function($, Behaviour){
 
-	function GravityBehaviour () {
+	function GravityBehaviour (options) {
 		Behaviour.apply(this, arguments);
+		options = options || {};
+		this.gravityFactor = options.gravityFactor || 0.3;
 	}
 	GravityBehaviour.prototype = Object.create(Behaviour.prototype);
 	GravityBehaviour.prototype.constructor = GravityBehaviour;
 
 	$.extend(GravityBehaviour.prototype, {
 		updateSceneElement: function(sceneElement) {
-			sceneElement.dvy = 0.3;
+			sceneElement.vy += this.gravityFactor;
 		}
 	});
 

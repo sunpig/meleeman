@@ -4,13 +4,15 @@ define(
 	'app/gameState',
 	'app/Scene',
 	'app/Controls',
-	'app/DebugConsole'
+	'app/DebugConsole',
+	'app/Resources'
 ],
 function(
 	gameState,
 	Scene,
 	Controls,
-	DebugConsole
+	DebugConsole,
+	Resources
 ) {
 	var _scene = null;
 	var _debugConsole = null;
@@ -47,12 +49,20 @@ function(
 
 	var game = {
 		init: function(id) {
+			gameState.on('resources/loaded', $.proxy(this.onResourcesLoaded, this));
+			this.resources = new Resources();
+			this.resources.init();
+		},
+		onResourcesLoaded: function() {
 			var gameContainer = document.getElementById('game');
 			if (gameContainer) {
 				var htmlCanvas = document.createElement('canvas');
 				htmlCanvas.className = 'viewport';
 				gameContainer.appendChild(htmlCanvas);
-				_scene = new Scene({htmlCanvas: htmlCanvas});
+				_scene = new Scene({
+					htmlCanvas: htmlCanvas,
+					resources: this.resources
+				});
 
 				var controlsContainer = document.createElement('div');
 				controlsContainer.className = 'controls';

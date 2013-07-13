@@ -18,6 +18,8 @@ function(gameState, $){
 
 		update: function() {
 			var txt = "Particles: " + gameState.particles;
+			txt += "; Player move left: " + !!gameState.PLAYER_MOVE_LEFT;
+			txt += "; Player move right: " + !!gameState.PLAYER_MOVE_RIGHT;
 			this.$p.text(txt);
 		}
 	});

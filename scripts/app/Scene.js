@@ -4,20 +4,26 @@ define(
 	'app/gameState',
 	'jquery',
 	'app/Viewport',
+	'app/Player',
 	'app/particles/RoundParticle',
 	'app/particles/RectangleParticle',
 	'app/behaviours/GravityBehaviour',
 	'app/behaviours/GroundBehaviour',
+	'app/behaviours/player/PlayerMovementBehaviour',
+	'app/behaviours/player/PlayerGroundBehaviour',
 	'app/util'
 ],
 function(
 	gameState,
 	$,
 	Viewport,
+	Player,
 	RoundParticle,
 	RectangleParticle,
 	GravityBehaviour,
 	GroundBehaviour,
+	PlayerMovementBehaviour,
+	PlayerGroundBehaviour,
 	util
 ) {
 
@@ -25,8 +31,10 @@ function(
 	var WIDTH = 640;
 
 	function Scene(options) {
+		this.resources = options.resources;
 		this.initViewport(options.htmlCanvas);
 		this.initParticles();
+		this.initPlayer();
 	}
 
 	$.extend(Scene.prototype, {
@@ -42,15 +50,25 @@ function(
 		initParticles: function() {
 			this.particles = [];
 			this.movementPhaseBehaviours = [
-				new GravityBehaviour()
+				new GravityBehaviour({gravityFactor: 0.1})
 			];
 			this.collisionPhaseBehaviours = [
 				new GroundBehaviour(HEIGHT - 20)
 			];
 		},
 
+		initPlayer: function() {
+			this.player = new Player({
+				resources: this.resources,
+				movementPhaseBehaviours: [new PlayerMovementBehaviour(), new GravityBehaviour({gravityFactor: 0.8})],
+				collisionPhaseBehaviours: [new PlayerGroundBehaviour(HEIGHT - 20)]
+			});
+			this.resetPlayer();
+		},
+
 		reset: function() {
 			this.resetParticles();
+			this.resetPlayer();
 		},
 
 		resetParticles: function() {
@@ -62,12 +80,19 @@ function(
 			gameState.particles = this.particles.length;
 		},
 
+		resetPlayer: function() {
+			this.player.resetAt({
+				sceneX: this.viewport.getSceneX((this.viewport.viewportWidth / 2) + this.player.bounds.l),
+				sceneY: 0
+			});
+		},
+
 		addParticle: function(options) {
 			var p = new RoundParticle({
 				sceneX: options.sceneX,
 				sceneY: options.sceneY,
 				vx: (Math.random() - 0.5) * 5,
-				vy: (Math.random() * 7) - 10,
+				vy: (Math.random() * 4) - 5,
 				movementPhaseBehaviours: this.movementPhaseBehaviours,
 				collisionPhaseBehaviours: this.collisionPhaseBehaviours,
 				colour: {
@@ -86,18 +111,31 @@ function(
 
 		animate: function() {
 			this.viewport.clear();
+
+			// Movement phase
 			this.particles.forEach(function(particle){
 				particle.doMovementPhase();
 			}, this);
+			this.player.doMovementPhase();
+
+			// Collision phase
 			this.particles.forEach(function(particle){
 				particle.doCollisionPhase();
 			}, this);
+			this.player.doCollisionPhase();
+
+			// Action phase
 			this.particles.forEach(function(particle){
 				particle.doActionPhase();
 			}, this);
+			this.player.doActionPhase();
+
+			// Draw phase
+			this.viewport.keepInView(this.player);
 			this.particles.forEach(function(particle){
 				particle.draw(this.viewport);
 			}, this);
+			this.player.draw(this.viewport);
 		}
 
 	});
