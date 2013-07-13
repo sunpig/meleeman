@@ -32,9 +32,10 @@ function($){
 		},
 
 		// Detect collisions based on anticipated position and velocity
-		doCollisionPhase: function() {
+		doCollisionPhase: function(options) {
+			options = options || {};
 			this.collisionPhaseBehaviours.forEach(function(collisionPhaseBehaviour){
-				collisionPhaseBehaviour.updateSceneElement(this);
+				collisionPhaseBehaviour.updateSceneElement(this, options);
 			}, this);
 
 			this.sceneX = this.nextx;

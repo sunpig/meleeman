@@ -17,9 +17,9 @@ function($, Behaviour){
 		updateSceneElement: function(player) {
 			var lowerExtent = player.bounds.b;
 			if ((player.nexty + lowerExtent) >= this.groundY && player.vy > 0) {
-				player.nexty = (this.groundY - lowerExtent);
-
+				player.vy = 0;
 				player.jumping = false;
+				player.nexty = (this.groundY - lowerExtent);
 			}
 		}
 	});

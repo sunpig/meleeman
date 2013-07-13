@@ -1,5 +1,5 @@
 define(
-'app/particles/RectangleParticle',
+'app/sceneElements/RectangleParticle',
 [
 	'jquery',
 	'app/SceneElement'

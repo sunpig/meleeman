@@ -8,7 +8,7 @@ function(
 ) {
 	var gameState = new EventEmitter();
 
-	gameState.particles = 0;
+	gameState.balls = 0;
 	gameState.running = false;
 
 	return gameState;

@@ -1,5 +1,5 @@
 define(
-'app/Player',
+'app/sceneElements/Player',
 [
 	'jquery',
 	'app/SceneElement'
@@ -9,7 +9,7 @@ function($, SceneElement){
 	function Player (options) {
 		SceneElement.apply(this, arguments);
 		this.resources = options.resources;
-		this.bounds = {t:-12,r:32,b:40,l:-15};
+		this.bounds = {t:13,r:8,b:15,l:8};
 		this.jumping = false;
 	}
 	Player.prototype = Object.create(SceneElement.prototype);
@@ -23,7 +23,7 @@ function($, SceneElement){
 
 			var playerImg = this.resources.playerImg;
 
-			context.drawImage(playerImg, viewportX, viewportY);
+			context.drawImage(playerImg, viewportX - 25, viewportY - 25);
 		},
 
 		resetAt: function(scenePosition) {

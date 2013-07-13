@@ -4,13 +4,13 @@ define(
 	'app/gameState',
 	'jquery',
 	'app/Viewport',
-	'app/Player',
-	'app/particles/RoundParticle',
-	'app/particles/RectangleParticle',
+	'app/sceneElements/Player',
+	'app/sceneElements/Ball',
 	'app/behaviours/GravityBehaviour',
 	'app/behaviours/GroundBehaviour',
 	'app/behaviours/player/PlayerMovementBehaviour',
 	'app/behaviours/player/PlayerGroundBehaviour',
+	'app/behaviours/player/PlayerBallCollisionBehaviour',
 	'app/util'
 ],
 function(
@@ -18,12 +18,12 @@ function(
 	$,
 	Viewport,
 	Player,
-	RoundParticle,
-	RectangleParticle,
+	Ball,
 	GravityBehaviour,
 	GroundBehaviour,
 	PlayerMovementBehaviour,
 	PlayerGroundBehaviour,
+	PlayerBallCollisionBehaviour,
 	util
 ) {
 
@@ -33,7 +33,7 @@ function(
 	function Scene(options) {
 		this.resources = options.resources;
 		this.initViewport(options.htmlCanvas);
-		this.initParticles();
+		this.initBalls();
 		this.initPlayer();
 	}
 
@@ -44,11 +44,11 @@ function(
 				height: HEIGHT,
 				width: WIDTH
 			});
-			gameState.on('viewport/tap', $.proxy(this.addParticle, this));
+			gameState.on('viewport/tap', $.proxy(this.addBall, this));
 		},
 
-		initParticles: function() {
-			this.particles = [];
+		initBalls: function() {
+			this.balls = [];
 			this.movementPhaseBehaviours = [
 				new GravityBehaviour({gravityFactor: 0.1})
 			];
@@ -61,21 +61,21 @@ function(
 			this.player = new Player({
 				resources: this.resources,
 				movementPhaseBehaviours: [new PlayerMovementBehaviour(), new GravityBehaviour({gravityFactor: 0.8})],
-				collisionPhaseBehaviours: [new PlayerGroundBehaviour(HEIGHT - 20)]
+				collisionPhaseBehaviours: [new PlayerGroundBehaviour(HEIGHT - 20), new PlayerBallCollisionBehaviour()]
 			});
 			this.resetPlayer();
 		},
 
 		reset: function() {
-			this.resetParticles();
+			this.resetBalls();
 			this.resetPlayer();
 		},
 
-		resetParticles: function() {
-			while (this.particles.length) {
-				this.particles.shift().destroy();
+		resetBalls: function() {
+			while (this.balls.length) {
+				this.balls.shift().destroy();
 			}
-			gameState.particles = this.particles.length;
+			gameState.balls = this.balls.length;
 		},
 
 		resetPlayer: function() {
@@ -85,8 +85,8 @@ function(
 			});
 		},
 
-		addParticle: function(options) {
-			var p = new RoundParticle({
+		addBall: function(options) {
+			var b = new Ball({
 				sceneX: options.sceneX,
 				sceneY: options.sceneY,
 				vx: (Math.random() - 0.5) * 5,
@@ -103,25 +103,25 @@ function(
 				},
 				radius: util.getRandomInt(5,30)
 			});
-			this.particles.push(p);
-			gameState.particles = this.particles.length;
+			this.balls.push(b);
+			gameState.balls = this.balls.length;
 		},
 
-		removeParticle: function() {
-			this.particles.shift().destroy();
-			gameState.particles = this.particles.length;
+		removeBall: function() {
+			this.balls.shift().destroy();
+			gameState.balls = this.balls.length;
 		},
 
 		doActionPhase: function() {
 			if (Math.random() < 0.01) {
-				this.addParticle({
+				this.addBall({
 					sceneX: this.viewport.getSceneX((this.viewport.viewportWidth / 2) + this.player.bounds.l),
 					sceneY: util.getRandomInt(50, HEIGHT - 100)
 				});
 			}
 
-			if (this.particles.length > 50) {
-				this.removeParticle();
+			if (this.balls.length > 50) {
+				this.removeBall();
 			}
 		},
 
@@ -129,28 +129,30 @@ function(
 			this.viewport.clear();
 
 			// Movement phase
-			this.particles.forEach(function(particle){
-				particle.doMovementPhase();
+			this.balls.forEach(function(ball){
+				ball.doMovementPhase();
 			}, this);
 			this.player.doMovementPhase();
 
 			// Collision phase
-			this.particles.forEach(function(particle){
-				particle.doCollisionPhase();
+			this.balls.forEach(function(ball){
+				ball.doCollisionPhase();
 			}, this);
-			this.player.doCollisionPhase();
+			this.player.doCollisionPhase({
+				balls:this.balls
+			});
 
 			// Action phase
 			this.doActionPhase();
-			this.particles.forEach(function(particle){
-				particle.doActionPhase();
+			this.balls.forEach(function(ball){
+				ball.doActionPhase();
 			}, this);
 			this.player.doActionPhase();
 
 			// Draw phase
 			this.viewport.keepInView(this.player);
-			this.particles.forEach(function(particle){
-				particle.draw(this.viewport);
+			this.balls.forEach(function(ball){
+				ball.draw(this.viewport);
 			}, this);
 			this.player.draw(this.viewport);
 		}
