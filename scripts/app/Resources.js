@@ -15,7 +15,7 @@ function(
 	$.extend(Resources.prototype, {
 		init: function(options) {
 			this.playerImg = new Image();
-			this.playerImg.src = 'resources/img/player/Standing.png';
+			this.playerImg.src = 'resources/img/player/standing-face-right.png';
 			$(this.playerImg).on('load', $.proxy(this.onPlayerImgLoaded, this));
 		},
 
